@@ -21,10 +21,7 @@ import AppLoader from "./AppLoader.vue";
 export default {
   components: { AppLoader },
   props: {
-    title: {
-      type: String,
-      default: "Click",
-    },
+    title: String,
     icon: String,
     loading: {
       type: Boolean,

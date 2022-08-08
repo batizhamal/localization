@@ -1,26 +1,14 @@
 <template>
   <div class="root">
-    <AppPanel class="box__row">
+    <div class="panel box__row">
       <div></div>
       <div>
-        <input type="file" ref="ruFile" class="file" @change="readRuFile()" />
-        <AppButton
-          icon="https://super.so/icon/light/upload.svg"
-          title="RU"
-          @click="$refs.ruFile.click()"
-          primary
-        />
+        <AppInputFile title="Upload RU" @change="readRuFile" />
       </div>
       <div>
-        <input type="file" ref="kzFile" class="file" @change="readKzFile()" />
-        <AppButton
-          icon="https://super.so/icon/light/upload.svg"
-          title="KZ"
-          @click="$refs.kzFile.click()"
-          primary
-        />
+        <AppInputFile title="Upload KZ" @change="readKzFile" />
       </div>
-    </AppPanel>
+    </div>
 
     <div v-if="ru" class="box">
       <div
@@ -40,37 +28,40 @@
       </div>
     </div>
 
-    <AppPanel class="box__row">
+    <div class="panel box__row">
       <div></div>
       <div>
         <AppButton
           icon="https://super.so/icon/light/download.svg"
-          title="RU"
-          @click="downloadRu()"
+          title="Download RU"
+          @click="downloadJson('ru', ru)"
           primary
         />
       </div>
       <div>
         <AppButton
           icon="https://super.so/icon/light/download.svg"
-          title="KZ"
-          @click="downloadKz()"
+          title="Download KZ"
+          @click="downloadJson('kz', kz)"
           primary
         />
       </div>
-    </AppPanel>
+    </div>
   </div>
 </template>
 
 <script>
 import AppButton from "@/ui/AppButton.vue";
-import AppPanel from "@/ui/AppPanel.vue";
 import AppInput from "@/ui/AppInput.vue";
+import AppInputFile from "@/ui/AppInputFile.vue";
+import DataService from "@/components/DataService";
+
 export default {
+  extends: DataService,
   components: {
-    AppPanel,
     AppButton,
     AppInput,
+    AppInputFile,
   },
   data: () => ({
     files: {
@@ -90,8 +81,9 @@ export default {
     }
   },
   methods: {
-    readRuFile() {
-      this.files.ru = this.$refs.ruFile.files[0];
+    // downloadJson,
+    readRuFile(file) {
+      this.files.ru = file;
 
       if (this.files.ru.name.includes(".json")) {
         this.reader.onload = (res) => {
@@ -106,8 +98,8 @@ export default {
         this.reader.readAsText(this.files.ru);
       }
     },
-    readKzFile() {
-      this.files.kz = this.$refs.kzFile.files[0];
+    readKzFile(file) {
+      this.files.kz = file;
 
       if (this.files.kz.name.includes(".json")) {
         this.reader.onload = (res) => {
@@ -125,24 +117,6 @@ export default {
     getCodes() {
       return Object.keys(this.ru);
     },
-    downloadRu() {
-      const a = document.createElement("a");
-      const file = new Blob([JSON.stringify(this.ru)], {
-        type: "application/json",
-      });
-      a.href = URL.createObjectURL(file);
-      a.download = "ru";
-      a.click();
-    },
-    downloadKz() {
-      const a = document.createElement("a");
-      const file = new Blob([JSON.stringify(this.kz)], {
-        type: "application/json",
-      });
-      a.href = URL.createObjectURL(file);
-      a.download = "kz";
-      a.click();
-    },
   },
 };
 </script>
@@ -150,10 +124,6 @@ export default {
 <style lang="scss">
 .root {
   width: 100%;
-}
-
-.file {
-  display: none;
 }
 
 .box {
@@ -176,6 +146,17 @@ export default {
       float: left;
     }
   }
+}
+
+.panel {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  height: $panel_height;
+  max-height: 100%;
+  padding: 0 $padding;
 }
 
 ::-webkit-scrollbar {

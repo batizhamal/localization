@@ -1,6 +1,13 @@
 <template>
   <div>
     <input type="file" ref="file" class="file" @change="readRuFile()" />
+    <AppButton
+      icon="https://super.so/icon/light/upload.svg"
+      title="Upload RU"
+      @click="$refs.file.click()"
+      primary
+    />
+
     <div v-if="ru">
       <div v-for="(code, index) in getCodes()" :key="`code-${index}`">
         <p>{{ code }}</p>
@@ -8,12 +15,21 @@
         <input type="text" v-model="kz[code]" />
       </div>
     </div>
-    <button @click="downloadKz()">Download KZ</button>
+    <AppButton
+      icon="https://super.so/icon/light/download.svg"
+      title="Download KZ"
+      @click="downloadKz()"
+      primary
+    />
   </div>
 </template>
 
 <script>
+import AppButton from "@/ui/AppButton.vue";
 export default {
+  components: {
+    AppButton,
+  },
   data: () => ({
     file: null,
     ru: {},
@@ -59,12 +75,6 @@ export default {
 
 <style lang="scss">
 .file {
-  $self: &;
-
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  display: none;
 }
 </style>

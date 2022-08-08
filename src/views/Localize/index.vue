@@ -3,14 +3,20 @@
     <div class="panel box__row">
       <div></div>
       <div>
-        <AppInputFile title="Upload RU" @change="readRuFile" />
+        <AppInputFile
+          title="Upload RU"
+          @change="readFile('ru', ...arguments)"
+        />
       </div>
       <div>
-        <AppInputFile title="Upload KZ" @change="readKzFile" />
+        <AppInputFile
+          title="Upload KZ"
+          @change="readFile('kz', ...arguments)"
+        />
       </div>
     </div>
 
-    <div v-if="ru" class="box">
+    <div class="box">
       <div
         v-for="(code, index) in getCodes()"
         :key="`code-${index}`"
@@ -34,7 +40,7 @@
         <AppButton
           icon="https://super.so/icon/light/download.svg"
           title="Download RU"
-          @click="downloadJson('ru', ru)"
+          @click="downloadJson('ru')"
           primary
         />
       </div>
@@ -42,7 +48,7 @@
         <AppButton
           icon="https://super.so/icon/light/download.svg"
           title="Download KZ"
-          @click="downloadJson('kz', kz)"
+          @click="downloadJson('kz')"
           primary
         />
       </div>
@@ -63,17 +69,8 @@ export default {
     AppInput,
     AppInputFile,
   },
-  data: () => ({
-    files: {
-      ru: null,
-      kz: null,
-    },
-    ru: {},
-    kz: {},
-    reader: new FileReader(),
-  }),
   created() {
-    if (!this.files.ru) {
+    if (!this.files.ru && localStorage.getItem("ru")) {
       this.ru = JSON.parse(localStorage.getItem("ru"));
     }
     if (!this.files.kz && localStorage.getItem("kz")) {
@@ -81,39 +78,6 @@ export default {
     }
   },
   methods: {
-    // downloadJson,
-    readRuFile(file) {
-      this.files.ru = file;
-
-      if (this.files.ru.name.includes(".json")) {
-        this.reader.onload = (res) => {
-          this.ru = JSON.parse(res.target.result);
-          localStorage.setItem("ru", JSON.stringify(this.ru));
-        };
-
-        this.reader.onerror = (err) => {
-          console.log(err);
-        };
-
-        this.reader.readAsText(this.files.ru);
-      }
-    },
-    readKzFile(file) {
-      this.files.kz = file;
-
-      if (this.files.kz.name.includes(".json")) {
-        this.reader.onload = (res) => {
-          this.kz = JSON.parse(res.target.result);
-          localStorage.setItem("kz", JSON.stringify(this.kz));
-        };
-
-        this.reader.onerror = (err) => {
-          console.log(err);
-        };
-
-        this.reader.readAsText(this.files.kz);
-      }
-    },
     getCodes() {
       return Object.keys(this.ru);
     },

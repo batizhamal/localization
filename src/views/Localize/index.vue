@@ -1,22 +1,22 @@
 <template>
   <div class="root">
     <AppPanel class="box__row">
-      <!--TODO: handle the upload methods -->
       <div></div>
       <div>
-        <input type="file" ref="file" class="file" @change="readRuFile()" />
+        <input type="file" ref="ruFile" class="file" @change="readRuFile()" />
         <AppButton
           icon="https://super.so/icon/light/upload.svg"
-          title="Upload RU"
-          @click="$refs.file.click()"
+          title="RU"
+          @click="$refs.ruFile.click()"
           primary
         />
       </div>
       <div>
-        <!-- TODO: add input type file -->
+        <input type="file" ref="kzFile" class="file" @change="readKzFile()" />
         <AppButton
           icon="https://super.so/icon/light/upload.svg"
-          title="Upload KZ"
+          title="KZ"
+          @click="$refs.kzFile.click()"
           primary
         />
       </div>
@@ -41,12 +41,11 @@
     </div>
 
     <AppPanel class="box__row">
-      <!-- TODO: refactor the download methods -->
       <div></div>
       <div>
         <AppButton
           icon="https://super.so/icon/light/download.svg"
-          title="Download RU"
+          title="RU"
           @click="downloadRu()"
           primary
         />
@@ -54,7 +53,7 @@
       <div>
         <AppButton
           icon="https://super.so/icon/light/download.svg"
-          title="Download KZ"
+          title="KZ"
           @click="downloadKz()"
           primary
         />
@@ -74,21 +73,27 @@ export default {
     AppInput,
   },
   data: () => ({
-    file: null,
+    files: {
+      ru: null,
+      kz: null,
+    },
     ru: {},
     kz: {},
     reader: new FileReader(),
   }),
   created() {
-    if (!this.file) {
+    if (!this.files.ru) {
       this.ru = JSON.parse(localStorage.getItem("ru"));
+    }
+    if (!this.files.kz && localStorage.getItem("kz")) {
+      this.kz = JSON.parse(localStorage.getItem("kz"));
     }
   },
   methods: {
     readRuFile() {
-      this.file = this.$refs.file.files[0];
+      this.files.ru = this.$refs.ruFile.files[0];
 
-      if (this.file.name.includes(".json")) {
+      if (this.files.ru.name.includes(".json")) {
         this.reader.onload = (res) => {
           this.ru = JSON.parse(res.target.result);
           localStorage.setItem("ru", JSON.stringify(this.ru));
@@ -98,7 +103,23 @@ export default {
           console.log(err);
         };
 
-        this.reader.readAsText(this.file);
+        this.reader.readAsText(this.files.ru);
+      }
+    },
+    readKzFile() {
+      this.files.kz = this.$refs.kzFile.files[0];
+
+      if (this.files.kz.name.includes(".json")) {
+        this.reader.onload = (res) => {
+          this.kz = JSON.parse(res.target.result);
+          localStorage.setItem("kz", JSON.stringify(this.kz));
+        };
+
+        this.reader.onerror = (err) => {
+          console.log(err);
+        };
+
+        this.reader.readAsText(this.files.kz);
       }
     },
     getCodes() {

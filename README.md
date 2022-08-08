@@ -1,24 +1,12 @@
 # localization
 
-## Project setup
-```
-npm install
-```
+## Что есть на данный момент:
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+- Можно загрузить ru.json и kz.json -> delta будет отображаться пустыми полями
+- Можно скачать ru.json и kz.json
+- При обновлении страницы данные не исчезают (использовала localStorage)
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Нюансы:
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- Считаю, что код грязный (работаю над другими способами upload и download)
+- Пока что работает только с json без вложенностей (работаю над этим)

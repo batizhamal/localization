@@ -3,12 +3,14 @@
     <div class="panel box__row">
       <div></div>
       <div>
+        <pre>{{ ru }}</pre>
         <AppInputFile
           title="Upload RU"
           @change="readFile('ru', ...arguments)"
         />
       </div>
       <div>
+        <pre>{{ kz }}</pre>
         <AppInputFile
           title="Upload KZ"
           @change="readFile('kz', ...arguments)"
@@ -18,18 +20,26 @@
 
     <div class="box">
       <div
-        v-for="(code, index) in getCodes()"
+        v-for="(code, index) in codes"
         :key="`code-${index}`"
         class="box__row"
       >
         <div>
-          <p>{{ code }}</p>
+          <p>{{ code.join("::") }}</p>
         </div>
         <div>
-          <AppInput type="text" v-model="ru[code]"></AppInput>
+          <AppInput
+            type="text"
+            :value="getItem(ru, code)"
+            @input="(val) => onChange(ru, code, val)"
+          ></AppInput>
         </div>
         <div>
-          <AppInput type="text" v-model="kz[code]"></AppInput>
+          <AppInput
+            type="text"
+            :value="getItem(kz, code)"
+            @input="(val) => onChange(kz, code, val)"
+          ></AppInput>
         </div>
       </div>
     </div>
@@ -72,14 +82,31 @@ export default {
   created() {
     if (!this.files.ru && localStorage.getItem("ru")) {
       this.ru = JSON.parse(localStorage.getItem("ru"));
+      this.iterateObject(this.ru, this.keys);
+      this.getPath(this.keys, [], 0);
     }
     if (!this.files.kz && localStorage.getItem("kz")) {
       this.kz = JSON.parse(localStorage.getItem("kz"));
     }
   },
   methods: {
-    getCodes() {
-      return Object.keys(this.ru);
+    onChange(json, keys, value) {
+      console.log("onChange: ", keys, value);
+      keys.reduce((self, key) => {
+        if (typeof self[key] != "object") {
+          self[key] = value;
+          return;
+        }
+        return self[key];
+      }, json);
+    },
+    getItem(json, keys) {
+      return keys.reduce((self, key) => {
+        if (!self) {
+          return null;
+        }
+        return self[key];
+      }, json);
     },
   },
 };

@@ -11,6 +11,11 @@ export default {
       keys: new TreeNode("keys"),
     };
   },
+  computed: {
+    isEmpty() {
+      return this.codes.length == 0;
+    },
+  },
   methods: {
     downloadJson(fileName) {
       const a = document.createElement("a");
@@ -38,10 +43,8 @@ export default {
             localStorage.setItem("kz", JSON.stringify(this.kz));
           }
           if (fileName == "kz") {
-            console.log("this.kz before upload", this.kz);
             ({ ...this.kz } = { ...JSON.parse(res.target.result) });
             localStorage.setItem("kz", JSON.stringify(this.kz));
-            console.log("this.kz after upload", this.kz);
           }
         };
 
@@ -84,6 +87,11 @@ export default {
 
       this.savePathArrayAsCode(path);
       path.splice(pathLen);
+    },
+
+    clearStorage() {
+      localStorage.clear();
+      this.$router.go();
     },
   },
 };

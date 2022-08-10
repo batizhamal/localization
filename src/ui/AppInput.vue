@@ -9,7 +9,7 @@
       :required="required"
       :type="type"
       :placeholder="placeholder"
-      class="input"
+      :class="classList"
     />
   </div>
 </template>
@@ -34,6 +34,14 @@ export default {
     },
     placeholder: String,
   },
+  computed: {
+    classList() {
+      return {
+        input: true,
+        "input--error": this.value == "",
+      };
+    },
+  },
 };
 </script>
 
@@ -51,6 +59,16 @@ export default {
   &:focus {
     background-color: #f1f1f1;
     outline: 1px solid #c5c5c5;
+  }
+
+  &--error {
+    background-color: #f0dcda;
+    outline: 1px solid #fb4d3d;
+
+    &:focus {
+      background-color: #ffd5d2;
+      outline: 1px solid #fb4d3d;
+    }
   }
 }
 

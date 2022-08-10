@@ -1,7 +1,15 @@
 <template>
   <div class="root">
     <div class="panel box__row">
-      <div></div>
+      <div>
+        <AppButton
+          icon="https://super.so/icon/light/trash-2.svg"
+          title="Clear"
+          v-show="ru"
+          @click="clearStorage"
+          red
+        />
+      </div>
       <div>
         <AppInputFile
           title="Upload RU"
@@ -15,6 +23,11 @@
           @change="readFile('kz', ...arguments)"
         />
       </div>
+    </div>
+
+    <div class="message" v-show="isEmpty">
+      <img src="https://super.so/icon/dark/alert-triangle.svg" />
+      <span>Nothing to display.<br />Upload files to start working.</span>
     </div>
 
     <div class="box">
@@ -144,6 +157,7 @@ export default {
   height: $panel_height;
   max-height: 100%;
   padding: 0 $padding;
+  background-color: #f3f3f3;
 }
 
 ::-webkit-scrollbar {
@@ -159,5 +173,26 @@ export default {
   background-color: #babac0;
   border-radius: 1rem;
   border: 0.1rem solid #ffffff;
+}
+
+.message {
+  $self: &;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  justify-items: center;
+  text-align: center;
+
+  & > img {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 20px;
+  }
+
+  & > span {
+    display: block;
+  }
 }
 </style>

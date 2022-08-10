@@ -3,14 +3,12 @@
     <div class="panel box__row">
       <div></div>
       <div>
-        <pre>{{ ru }}</pre>
         <AppInputFile
           title="Upload RU"
           @change="readFile('ru', ...arguments)"
         />
       </div>
       <div>
-        <pre>{{ kz }}</pre>
         <AppInputFile
           title="Upload KZ"
           @change="readFile('kz', ...arguments)"
@@ -31,14 +29,14 @@
           <AppInput
             type="text"
             :value="getItem(ru, code)"
-            @input="(val) => onChange(ru, code, val)"
+            @input="(val) => onChange('ru', code, val)"
           ></AppInput>
         </div>
         <div>
           <AppInput
             type="text"
             :value="getItem(kz, code)"
-            @input="(val) => onChange(kz, code, val)"
+            @input="(val) => onChange('kz', code, val)"
           ></AppInput>
         </div>
       </div>
@@ -80,25 +78,25 @@ export default {
     AppInputFile,
   },
   created() {
-    if (!this.files.ru && localStorage.getItem("ru")) {
-      this.ru = JSON.parse(localStorage.getItem("ru"));
-      this.iterateObject(this.ru, this.keys);
-      this.getPath(this.keys, [], 0);
+    console.log("created");
+    this.ru = JSON.parse(localStorage.getItem("ru"));
+    if (this.ru) {
+      this.initCodes(this.ru);
     }
-    if (!this.files.kz && localStorage.getItem("kz")) {
-      this.kz = JSON.parse(localStorage.getItem("kz"));
-    }
+
+    this.kz = JSON.parse(localStorage.getItem("kz"));
   },
   methods: {
     onChange(json, keys, value) {
-      console.log("onChange: ", keys, value);
+      this[json] = JSON.parse(localStorage.getItem(json));
       keys.reduce((self, key) => {
         if (typeof self[key] != "object") {
           self[key] = value;
           return;
         }
         return self[key];
-      }, json);
+      }, this[json]);
+      localStorage.setItem(json, JSON.stringify(this[json]));
     },
     getItem(json, keys) {
       return keys.reduce((self, key) => {

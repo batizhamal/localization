@@ -29,6 +29,7 @@ export default {
           localStorage.setItem(fileName, JSON.stringify(this[fileName]));
 
           if (fileName == "ru") {
+            this.codes = [];
             this.kz = cloneDeep(this.ru);
             this.initCodes();
             localStorage.setItem("codes", JSON.stringify(this.codes));

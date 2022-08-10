@@ -11,6 +11,7 @@
       <div>
         <AppInputFile
           title="Upload KZ"
+          :disabled="true"
           @change="readFile('kz', ...arguments)"
         />
       </div>
@@ -80,11 +81,8 @@ export default {
   created() {
     console.log("created");
     this.ru = JSON.parse(localStorage.getItem("ru"));
-    if (this.ru) {
-      this.initCodes(this.ru);
-    }
-
-    this.kz = JSON.parse(localStorage.getItem("kz"));
+    this.kz = JSON.parse(localStorage.getItem("kz")) ?? {};
+    this.codes = JSON.parse(localStorage.getItem("codes")) ?? [];
   },
   methods: {
     onChange(json, keys, value) {

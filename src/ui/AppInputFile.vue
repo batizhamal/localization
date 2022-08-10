@@ -9,6 +9,7 @@
     <AppButton
       icon="https://super.so/icon/light/upload.svg"
       :title="title"
+      :disabled="disabled"
       @click="$refs.mfile.click()"
       primary
     />
@@ -25,6 +26,10 @@ export default {
     title: {
       type: String,
       default: "Upload",
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 };

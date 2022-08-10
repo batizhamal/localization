@@ -1,3 +1,4 @@
+import { cloneDeep } from "lodash";
 import { TreeNode } from "../Tree/TreeNode";
 
 export default {
@@ -26,8 +27,12 @@ export default {
         this.reader.onload = (res) => {
           this[fileName] = JSON.parse(res.target.result);
           localStorage.setItem(fileName, JSON.stringify(this[fileName]));
-          if (this.ru) {
-            this.initCodes(this.ru);
+
+          if (fileName == "ru") {
+            this.kz = cloneDeep(this.ru);
+            this.initCodes();
+            localStorage.setItem("codes", JSON.stringify(this.codes));
+            localStorage.setItem("kz", JSON.stringify(this.kz));
           }
         };
 
@@ -43,12 +48,15 @@ export default {
       this.codes.push([...path.slice(1)]);
     },
 
-    initCodes(obj, path = [], pathLen = 0) {
+    initCodes(obj = this.ru, obj2 = this.kz, path = [], pathLen = 0) {
       if (Array.isArray(obj)) {
         pathLen++;
         obj.forEach((item, index) => {
           path[pathLen] = index;
-          this.initCodes(item, path, pathLen);
+          if (typeof obj2[index] != "object") {
+            obj2[index] = "";
+          }
+          this.initCodes(item, obj2[index], path, pathLen);
         });
         return;
       }
@@ -57,7 +65,10 @@ export default {
         pathLen++;
         Object.keys(obj).forEach((key) => {
           path[pathLen] = key;
-          this.initCodes(obj[key], path, pathLen);
+          if (typeof obj2[key] != "object") {
+            obj2[key] = "";
+          }
+          this.initCodes(obj[key], obj2[key], path, pathLen);
         });
         return;
       }

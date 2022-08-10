@@ -11,7 +11,7 @@
       <div>
         <AppInputFile
           title="Upload KZ"
-          :disabled="true"
+          :disabled="!ru"
           @change="readFile('kz', ...arguments)"
         />
       </div>

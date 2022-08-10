@@ -25,15 +25,23 @@ export default {
     readFile(fileName, file) {
       if (file.name.includes(".json")) {
         this.reader.onload = (res) => {
-          this[fileName] = JSON.parse(res.target.result);
-          localStorage.setItem(fileName, JSON.stringify(this[fileName]));
-
           if (fileName == "ru") {
+            this.ru = JSON.parse(res.target.result);
+            localStorage.setItem("ru", JSON.stringify(this[fileName]));
+
             this.codes = [];
             this.kz = cloneDeep(this.ru);
+
             this.initCodes();
+
             localStorage.setItem("codes", JSON.stringify(this.codes));
             localStorage.setItem("kz", JSON.stringify(this.kz));
+          }
+          if (fileName == "kz") {
+            console.log("this.kz before upload", this.kz);
+            ({ ...this.kz } = { ...JSON.parse(res.target.result) });
+            localStorage.setItem("kz", JSON.stringify(this.kz));
+            console.log("this.kz after upload", this.kz);
           }
         };
 

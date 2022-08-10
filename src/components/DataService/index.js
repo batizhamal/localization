@@ -43,7 +43,8 @@ export default {
             localStorage.setItem("kz", JSON.stringify(this.kz));
           }
           if (fileName == "kz") {
-            ({ ...this.kz } = { ...JSON.parse(res.target.result) });
+            // ({ ...this.kz } = { ...JSON.parse(res.target.result) });
+            this.fillDelta(this.kz, JSON.parse(res.target.result));
             localStorage.setItem("kz", JSON.stringify(this.kz));
           }
         };
@@ -92,6 +93,31 @@ export default {
     clearStorage() {
       localStorage.clear();
       this.$router.go();
+    },
+
+    setItem(json, keys, value) {
+      keys.reduce((self, key) => {
+        if (typeof self[key] != "object") {
+          self[key] = value;
+          return;
+        }
+        return self[key];
+      }, json);
+    },
+
+    getItem(json, keys) {
+      return keys.reduce((self, key) => {
+        if (!self) {
+          return null;
+        }
+        return self[key];
+      }, json);
+    },
+
+    fillDelta(json, data) {
+      this.codes.forEach((code) => {
+        this.setItem(json, code, this.getItem(data, code) ?? "");
+      });
     },
   },
 };

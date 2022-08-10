@@ -98,24 +98,10 @@ export default {
     this.codes = JSON.parse(localStorage.getItem("codes")) ?? [];
   },
   methods: {
-    onChange(json, keys, value) {
-      this[json] = JSON.parse(localStorage.getItem(json));
-      keys.reduce((self, key) => {
-        if (typeof self[key] != "object") {
-          self[key] = value;
-          return;
-        }
-        return self[key];
-      }, this[json]);
-      localStorage.setItem(json, JSON.stringify(this[json]));
-    },
-    getItem(json, keys) {
-      return keys.reduce((self, key) => {
-        if (!self) {
-          return null;
-        }
-        return self[key];
-      }, json);
+    onChange(fileName, keys, value) {
+      this[fileName] = JSON.parse(localStorage.getItem(fileName));
+      this.setItem(this[fileName], keys, value);
+      localStorage.setItem(fileName, JSON.stringify(this[fileName]));
     },
   },
 };

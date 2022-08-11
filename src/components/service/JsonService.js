@@ -17,8 +17,9 @@ export const getItem = (json, keys) => {
   }, json);
 };
 
-export const fillDelta = (json, data) => {
-  this.codes.forEach((code) => {
+export const fillDelta = (codes, json, data) => {
+  console.log(codes);
+  codes.forEach((code) => {
     setItem(json, code, getItem(data, code) ?? "");
   });
 };

@@ -14,7 +14,10 @@
         <AppInputFile title="Upload RU" @change="readFile" />
       </div>
       <div>
-        <AppInputFile title="Upload KZ" :disabled="!ru" @change="readFile" />
+        <AppInputFile title="Upload KZ" @change="readFile" />
+      </div>
+      <div>
+        <AppInputFile title="Upload EN" @change="readFile" />
       </div>
     </div>
 
@@ -46,6 +49,13 @@
             @input="(val) => onChange('kz', code, val)"
           ></AppInput>
         </div>
+        <div>
+          <AppInput
+            type="text"
+            :value="getItem(en, code)"
+            @input="(val) => onChange('en', code, val)"
+          ></AppInput>
+        </div>
       </div>
     </div>
 
@@ -64,6 +74,14 @@
           icon="https://super.so/icon/light/download.svg"
           title="Download KZ"
           @click="downloadJson('kz', kz)"
+          primary
+        />
+      </div>
+      <div>
+        <AppButton
+          icon="https://super.so/icon/light/download.svg"
+          title="Download EN"
+          @click="downloadJson('en', en)"
           primary
         />
       </div>
@@ -87,15 +105,19 @@ export default {
   },
   data: () => {
     return {
-      ru: {},
       kz: {},
+      ru: {},
+      en: {},
       codes: [],
     };
   },
   created() {
     console.log("created");
-    this.ru = JSON.parse(localStorage.getItem("ru"));
-    this.kz = JSON.parse(localStorage.getItem("kz")) ?? {};
+
+    ["kz", "ru", "en"].forEach((el) => {
+      this[el] = JSON.parse(localStorage.getItem(el)) ?? {};
+    });
+
     this.codes = JSON.parse(localStorage.getItem("codes")) ?? [];
   },
   computed: {
@@ -106,6 +128,7 @@ export default {
   methods: {
     downloadJson,
     getItem,
+
     onChange(fileName, keys, value) {
       this[fileName] = JSON.parse(localStorage.getItem(fileName));
       setItem(this[fileName], keys, value);
@@ -116,45 +139,64 @@ export default {
       const filename = file.name.split(".")[0];
       const data = await uploadJson(file);
 
-      if (filename == "ru") {
-        this.ru = data;
-        localStorage.setItem("ru", JSON.stringify(this.ru));
-        this.codes = [];
-        this.kz = cloneDeep(this.ru);
-        this.initCodes();
-        localStorage.setItem("codes", JSON.stringify(this.codes));
-        localStorage.setItem("kz", JSON.stringify(this.kz));
+      // загружается самый первый файл - primary
+      if (this.isEmpty) {
+        this[filename] = data;
+        localStorage.setItem(filename, JSON.stringify(this[filename]));
+        ["kz", "ru", "en"].forEach((lang) => {
+          this[lang] = cloneDeep(this[filename]);
+        });
+
+        const secondaryFiles = ["kz", "ru", "en"]
+          .filter((lang) => lang != filename)
+          .map((lang) => this[lang]);
+
+        this.initCodes(this[filename], secondaryFiles);
+
+        ["kz", "ru", "en", "codes"].forEach((el) => {
+          localStorage.setItem(el, JSON.stringify(this[el]));
+        });
       }
-      if (filename == "kz") {
-        fillDelta(this.kz, data);
-        localStorage.setItem("kz", JSON.stringify(this.kz));
-      }
+
+      // загружаются остальные файлы, когда уже есть primary
+      fillDelta(this.codes, this[filename], data);
+      localStorage.setItem(filename, JSON.stringify(this[filename]));
     },
 
     savePathArrayAsCode(path) {
       this.codes.push([...path.slice(1)]);
     },
 
-    initCodes(obj1 = this.ru, obj2 = this.kz, path = [], pathLen = 0) {
-      if (Array.isArray(obj1)) {
+    initCodes(primary, [secondary1, secondary2], path = [], pathLen = 0) {
+      if (Array.isArray(primary)) {
         pathLen++;
-        obj1.forEach((item, index) => {
+        primary.forEach((item, index) => {
           path[pathLen] = index;
-          if (typeof obj2[index] != "object") {
-            obj2[index] = "";
+          if (typeof primary[index] != "object") {
+            secondary1[index] = secondary2[index] = "";
           }
-          this.initCodes(item, obj2[index], path, pathLen);
+          this.initCodes(
+            item,
+            [secondary1[index], secondary2[index]],
+            path,
+            pathLen
+          );
         });
         return;
       }
-      if (typeof obj1 === "object" && !Array.isArray(obj1)) {
+      if (typeof primary === "object" && !Array.isArray(primary)) {
         pathLen++;
-        Object.keys(obj1).forEach((key) => {
+        Object.keys(primary).forEach((key) => {
           path[pathLen] = key;
-          if (typeof obj2[key] != "object") {
-            obj2[key] = "";
+          if (typeof primary[key] != "object") {
+            secondary1[key] = secondary2[key] = "";
           }
-          this.initCodes(obj1[key], obj2[key], path, pathLen);
+          this.initCodes(
+            primary[key],
+            [secondary1[key], secondary2[key]],
+            path,
+            pathLen
+          );
         });
         return;
       }
@@ -191,7 +233,7 @@ export default {
     align-items: center;
 
     & > div {
-      width: 33.3%;
+      width: 25%;
       float: left;
     }
   }

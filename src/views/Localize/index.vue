@@ -11,17 +11,10 @@
         />
       </div>
       <div>
-        <AppInputFile
-          title="Upload RU"
-          @change="readFile('ru', ...arguments)"
-        />
+        <AppInputFile title="Upload RU" @change="readFile" />
       </div>
       <div>
-        <AppInputFile
-          title="Upload KZ"
-          :disabled="!ru"
-          @change="readFile('kz', ...arguments)"
-        />
+        <AppInputFile title="Upload KZ" :disabled="!ru" @change="readFile" />
       </div>
     </div>
 
@@ -62,7 +55,7 @@
         <AppButton
           icon="https://super.so/icon/light/download.svg"
           title="Download RU"
-          @click="downloadJson('ru')"
+          @click="downloadJson('ru', ru)"
           primary
         />
       </div>
@@ -70,7 +63,7 @@
         <AppButton
           icon="https://super.so/icon/light/download.svg"
           title="Download KZ"
-          @click="downloadJson('kz')"
+          @click="downloadJson('kz', kz)"
           primary
         />
       </div>
@@ -82,14 +75,22 @@
 import AppButton from "@/ui/AppButton.vue";
 import AppInput from "@/ui/AppInput.vue";
 import AppInputFile from "@/ui/AppInputFile.vue";
-import DataService from "@/components/DataService";
+import { uploadJson, downloadJson } from "@/components/service/FileService";
+import { setItem, getItem, fillDelta } from "@/components/service/JsonService";
+import { cloneDeep } from "lodash";
 
 export default {
-  extends: DataService,
   components: {
     AppButton,
     AppInput,
     AppInputFile,
+  },
+  data: () => {
+    return {
+      ru: {},
+      kz: {},
+      codes: [],
+    };
   },
   created() {
     console.log("created");
@@ -97,11 +98,73 @@ export default {
     this.kz = JSON.parse(localStorage.getItem("kz")) ?? {};
     this.codes = JSON.parse(localStorage.getItem("codes")) ?? [];
   },
+  computed: {
+    isEmpty() {
+      return this.codes.length == 0;
+    },
+  },
   methods: {
+    downloadJson,
+    getItem,
     onChange(fileName, keys, value) {
       this[fileName] = JSON.parse(localStorage.getItem(fileName));
-      this.setItem(this[fileName], keys, value);
+      setItem(this[fileName], keys, value);
       localStorage.setItem(fileName, JSON.stringify(this[fileName]));
+    },
+
+    async readFile(file) {
+      const filename = file.name.split(".")[0];
+      const data = await uploadJson(file);
+
+      if (filename == "ru") {
+        this.ru = data;
+        localStorage.setItem("ru", JSON.stringify(this.ru));
+        this.codes = [];
+        this.kz = cloneDeep(this.ru);
+        this.initCodes();
+        localStorage.setItem("codes", JSON.stringify(this.codes));
+        localStorage.setItem("kz", JSON.stringify(this.kz));
+      }
+      if (filename == "kz") {
+        fillDelta(this.kz, data);
+        localStorage.setItem("kz", JSON.stringify(this.kz));
+      }
+    },
+
+    savePathArrayAsCode(path) {
+      this.codes.push([...path.slice(1)]);
+    },
+
+    initCodes(obj1 = this.ru, obj2 = this.kz, path = [], pathLen = 0) {
+      if (Array.isArray(obj1)) {
+        pathLen++;
+        obj1.forEach((item, index) => {
+          path[pathLen] = index;
+          if (typeof obj2[index] != "object") {
+            obj2[index] = "";
+          }
+          this.initCodes(item, obj2[index], path, pathLen);
+        });
+        return;
+      }
+      if (typeof obj1 === "object" && !Array.isArray(obj1)) {
+        pathLen++;
+        Object.keys(obj1).forEach((key) => {
+          path[pathLen] = key;
+          if (typeof obj2[key] != "object") {
+            obj2[key] = "";
+          }
+          this.initCodes(obj1[key], obj2[key], path, pathLen);
+        });
+        return;
+      }
+      this.savePathArrayAsCode(path);
+      path.splice(pathLen);
+    },
+
+    clearStorage() {
+      localStorage.clear();
+      this.$router.go();
     },
   },
 };

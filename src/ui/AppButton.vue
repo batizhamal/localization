@@ -1,9 +1,10 @@
 <template>
   <button @click="$emit('click')" :disabled="disabled" :class="classList">
-    <img
+    <AppIcon
       v-if="icon"
       :class="{ button__icon: true, 'button__icon--hide': loading }"
-      :src="icon"
+      :icon="icon"
+      :color="icon_color"
     />
     <span
       v-if="title"
@@ -17,12 +18,13 @@
 </template>
 
 <script>
+import AppIcon from "./AppIcon.vue";
 import AppLoader from "./AppLoader.vue";
+
 export default {
-  components: { AppLoader },
+  components: { AppLoader, AppIcon },
   props: {
     title: String,
-    icon: String,
     loading: {
       type: Boolean,
       default: false,
@@ -34,17 +36,23 @@ export default {
     primary: Boolean,
     outline: Boolean,
     red: Boolean,
+    clear: Boolean,
+    icon: String,
+    icon_color: {
+      type: String,
+    },
   },
   computed: {
     classList() {
       return {
         button: true,
-        "button--padding": !this.icon,
-        "button--padding-with-icon": this.icon,
         "button--primary": this.primary,
         "button--outline": this.outline,
         "button--red": this.red,
+        "button--clear": this.clear,
         "button--disabled": this.disabled || this.loading,
+        "button--padding-only-icon": this.icon && !this.title,
+        "button--with-icon": this.icon,
       };
     },
   },
@@ -67,19 +75,20 @@ export default {
   border-color: transparent;
   height: 2rem;
   max-height: 100%;
-  border-radius: 5px;
+  border-radius: 2px;
   cursor: pointer;
   white-space: nowrap;
   width: auto;
+  padding-right: 1rem;
+  padding-left: 1rem;
 
-  &--padding {
-    padding-right: rem(14);
-    padding-left: rem(14);
+  &--padding-only-icon {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
   }
 
-  &--padding-with-icon {
-    padding-right: rem(14);
-    padding-left: rem(10);
+  &--with-icon {
+    gap: 0.5rem;
   }
 
   &__title {
@@ -92,9 +101,8 @@ export default {
 
   &__icon {
     transition: opacity 0.1s ease-in-out;
-    width: 16px;
-    height: 16px;
-    padding: 0 5px 0 0;
+    width: 12px;
+    height: 12px;
     &--hide {
       opacity: 0;
     }
@@ -102,26 +110,53 @@ export default {
 
   &--primary {
     color: white;
-    background-color: #6564db;
+    background: #1890ff;
 
     &:hover {
-      background-color: #4e4cb3;
+      background-color: #1890ff;
+    }
+
+    &:active {
+      &:not(#{ $self }--disabled) {
+        background-color: #157ddf;
+      }
     }
   }
 
   &--outline {
-    border-color: gray;
+    border: 1px solid #eeeeee;
 
     &:hover {
-      background-color: rgb(212, 212, 212);
+      background-color: #ececec;
+    }
+
+    &:active {
+      &:not(#{ $self }--disabled) {
+        background-color: rgb(212, 212, 212);
+      }
     }
   }
+
   &--red {
     color: white;
     background-color: #fb4d3d;
 
     &:hover {
       background-color: #da3f31;
+    }
+  }
+
+  &--clear {
+    background-color: transparent;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    &:active {
+      &:not(#{ $self }--disabled) {
+        background-color: transparent;
+      }
     }
   }
 

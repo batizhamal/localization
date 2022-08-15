@@ -1,0 +1,235 @@
+<template>
+  <div class="box">
+    <table>
+      <thead>
+        <tr class="head__row">
+          <th class="head__col head__col--num">
+            <span>RU</span>
+          </th>
+          <th class="head__col head__col--code"></th>
+          <th class="head__col">
+            <span></span>
+            <div class="head__buttons">
+              <AppInputFile
+                icon_color="grey-to-blue"
+                @change="$emit('readFile', ...arguments)"
+                :title="null"
+                clear
+              />
+              <AppButton icon="edit" icon_color="grey-to-black" clear />
+              <AppButton
+                icon="download"
+                icon_color="grey-to-blue"
+                clear
+                @click="$emit('download', 'ru')"
+              />
+            </div>
+          </th>
+          <th class="head__col">
+            <span class="ml-1">KZ</span>
+            <div class="head__buttons">
+              <AppInputFile
+                icon_color="grey-to-blue"
+                @change="$emit('readFile', ...arguments)"
+                :title="null"
+                clear
+              />
+              <AppButton icon="edit" icon_color="grey-to-black" clear />
+              <AppButton icon="trash" icon_color="grey-to-red" clear />
+              <AppButton
+                icon="download"
+                icon_color="grey-to-blue"
+                clear
+                @click="$emit('download', 'kz')"
+              />
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="(code, index) in codes"
+          :key="`row-${index}`"
+          class="body__row"
+        >
+          <td class="body__col body__col--num">
+            <p>{{ index }}</p>
+          </td>
+          <td class="body__col body__col--code">
+            <p class="ml-1">{{ code.join("::") }}</p>
+          </td>
+          <td class="body__col">
+            <AppInput
+              type="text"
+              :value="getItem(ru, code)"
+              @input="(val) => $emit('onChange', 'ru', code, val)"
+              placeholder="Введите текст"
+            ></AppInput>
+          </td>
+          <td class="body__col">
+            <AppInput
+              type="text"
+              :value="getItem(kz, code)"
+              @input="(val) => $emit('onChange', 'kz', code, val)"
+              placeholder="Введите текст"
+            ></AppInput>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<script>
+import AppInput from "@/ui/AppInput.vue";
+import AppButton from "@/ui/AppButton.vue";
+import AppInputFile from "@/ui/AppInputFile.vue";
+import { getItem } from "@/components/service/JsonService";
+
+export default {
+  components: {
+    AppInput,
+    AppButton,
+    AppInputFile,
+  },
+  props: {
+    codes: Array,
+    kz: Object,
+    ru: Object,
+  },
+  methods: {
+    getItem,
+  },
+};
+</script>
+
+<style lang="scss">
+table {
+  $self: &;
+
+  width: 100%;
+  font-size: 0.9rem;
+  border-collapse: collapse;
+  max-width: 100%;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: #fafafa;
+}
+
+tr.head__row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  height: 39px;
+  width: 100%;
+  max-width: 100%;
+}
+
+th.head__col {
+  max-width: 35%;
+  width: 35%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0;
+  border-width: 0px 1px 1px 0px;
+  border-style: solid;
+  border-color: #eeeeee;
+
+  &--num {
+    max-width: 2rem;
+    width: 2rem;
+    border-width: 0px 0px 1px 0px;
+    border-style: solid;
+    border-color: #eeeeee;
+    padding: 0;
+    padding-left: 1rem;
+  }
+  &--code {
+    max-width: calc(30% - 2rem);
+    width: calc(30% - 2rem);
+    border-width: 0px 0px 1px 0px;
+    border-style: solid;
+    border-color: #eeeeee;
+    padding: 0;
+  }
+}
+
+div.head__buttons {
+  display: flex;
+  gap: 0.3rem;
+}
+
+tbody {
+  width: 100%;
+  max-width: 100%;
+}
+
+tr.body__row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  height: 3rem;
+  width: 100%;
+  max-width: 100%;
+}
+td.body__col {
+  max-width: 35%;
+  width: 35%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0;
+  border: none;
+
+  &--num {
+    max-width: 2rem;
+    width: 2rem;
+    padding: 0;
+    padding-left: 1rem;
+    background-color: #fafafa;
+    border-width: 0px 1px 1px 0px;
+    border-style: solid;
+    border-color: #eeeeee;
+  }
+  &--code {
+    max-width: calc(30% - 2rem);
+    width: calc(30% - 2rem);
+    padding: 0;
+    background-color: #fafafa;
+    border-width: 0px 1px 1px 0px;
+    border-style: solid;
+    border-color: #eeeeee;
+  }
+}
+
+.box {
+  $self: &;
+
+  height: calc(100vh - $panel_height);
+  width: 100vw;
+  overflow-y: scroll;
+  position: relative;
+}
+
+::-webkit-scrollbar {
+  background-color: transparent;
+  width: 1rem;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #babac0;
+  border-radius: 1rem;
+  border: 0.1rem solid #ffffff;
+}
+</style>

@@ -48,26 +48,27 @@ export default {
 <style lang="scss" scoped>
 .input {
   $self: &;
-  width: 90%;
-  max-width: 100%;
-  height: 2rem;
-  border-color: transparent;
-  border-radius: 5px;
-  background-color: #f3f3f3;
+  width: calc(100% - 11px);
+  height: calc(3rem - 2px);
   padding: 0 5px;
+  border-style: solid;
+  border-width: 0 1px 1px 0;
+  border-color: #eeeeee;
+  outline: none;
 
   &:focus {
-    background-color: #f1f1f1;
-    outline: 1px solid #c5c5c5;
+    outline: none;
   }
 
   &--error {
-    background-color: #f0dcda;
-    outline: 1px solid #fb4d3d;
+    outline: none;
+    // border: 1px solid #fb4d3d;
+    background-color: #ffe2e0;
 
     &:focus {
-      background-color: #ffd5d2;
-      outline: 1px solid #fb4d3d;
+      outline: none;
+      // border: 1px solid #fb4d3d;
+      background-color: #ffe2e0;
     }
   }
 }

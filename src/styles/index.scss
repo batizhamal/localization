@@ -1,7 +1,8 @@
 @import "@/styles/vars.scss";
+@import "@/styles/helpers.scss";
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Roboto, sans-serif;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;

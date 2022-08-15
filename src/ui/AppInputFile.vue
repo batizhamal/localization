@@ -7,9 +7,11 @@
       @change="$emit('change', $refs.mfile.files[0])"
     />
     <AppButton
-      icon="https://super.so/icon/light/upload.svg"
+      icon="upload"
+      :icon_color="icon_color"
       :title="title"
       :disabled="disabled"
+      :clear="clear"
       @click="$refs.mfile.click()"
       primary
     />
@@ -31,6 +33,8 @@ export default {
       type: Boolean,
       default: false,
     },
+    clear: Boolean,
+    icon_color: String,
   },
 };
 </script>

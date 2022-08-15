@@ -18,7 +18,6 @@ export const getItem = (json, keys) => {
 };
 
 export const fillDelta = (codes, json, data) => {
-  console.log(codes);
   codes.forEach((code) => {
     setItem(json, code, getItem(data, code) ?? "");
   });

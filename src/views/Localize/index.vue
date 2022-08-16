@@ -14,14 +14,14 @@
           outline
         />
       </div>
-      <div>
+      <!-- <div>
         <AppButton
           icon="download"
           title="Download all"
           outline
           :disabled="true"
         />
-      </div>
+      </div> -->
     </div>
 
     <div class="message" v-show="isEmpty">
@@ -62,8 +62,6 @@ export default {
     };
   },
   created() {
-    console.log("created");
-
     ["kz", "ru"].forEach((el) => {
       this[el] = JSON.parse(localStorage.getItem(el)) ?? {};
     });
@@ -89,36 +87,36 @@ export default {
     },
 
     async readFile(file) {
-      const filename = file.name.split(".")[0];
-      let data;
       try {
-        data = await uploadJson(file);
+        const data = await uploadJson(file);
+
+        const filename = this.isEmpty ? "ru" : "kz";
+
+        // загружается самый первый файл - primary
+        if (this.isEmpty) {
+          this[filename] = data;
+          localStorage.setItem(filename, JSON.stringify(this[filename]));
+          ["kz", "ru"].forEach((lang) => {
+            this[lang] = cloneDeep(this[filename]);
+          });
+
+          const secondaryFiles = ["kz", "ru"]
+            .filter((lang) => lang != filename)
+            .map((lang) => this[lang]);
+
+          this.initCodes(this[filename], secondaryFiles);
+
+          ["kz", "ru", "codes"].forEach((el) => {
+            localStorage.setItem(el, JSON.stringify(this[el]));
+          });
+        }
+
+        // загружаются остальные файлы, когда уже есть primary
+        fillDelta(this.codes, this[filename], data);
+        localStorage.setItem(filename, JSON.stringify(this[filename]));
       } catch (error) {
         console.log(error);
       }
-
-      // загружается самый первый файл - primary
-      if (this.isEmpty) {
-        this[filename] = data;
-        localStorage.setItem(filename, JSON.stringify(this[filename]));
-        ["kz", "ru"].forEach((lang) => {
-          this[lang] = cloneDeep(this[filename]);
-        });
-
-        const secondaryFiles = ["kz", "ru"]
-          .filter((lang) => lang != filename)
-          .map((lang) => this[lang]);
-
-        this.initCodes(this[filename], secondaryFiles);
-
-        ["kz", "ru", "codes"].forEach((el) => {
-          localStorage.setItem(el, JSON.stringify(this[el]));
-        });
-      }
-
-      // загружаются остальные файлы, когда уже есть primary
-      fillDelta(this.codes, this[filename], data);
-      localStorage.setItem(filename, JSON.stringify(this[filename]));
     },
 
     savePathArrayAsCode(path) {

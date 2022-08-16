@@ -16,7 +16,6 @@
                 :title="null"
                 clear
               />
-              <AppButton icon="edit" icon_color="grey-to-black" clear />
               <AppButton
                 icon="download"
                 icon_color="grey-to-blue"
@@ -34,8 +33,7 @@
                 :title="null"
                 clear
               />
-              <AppButton icon="edit" icon_color="grey-to-black" clear />
-              <AppButton icon="trash" icon_color="grey-to-red" clear />
+              <!-- <AppButton icon="trash" icon_color="grey-to-red" clear /> -->
               <AppButton
                 icon="download"
                 icon_color="grey-to-blue"
@@ -64,6 +62,7 @@
               :value="getItem(ru, code)"
               @input="(val) => $emit('onChange', 'ru', code, val)"
               placeholder="Введите текст"
+              :warn="isNotSame(code)"
             ></AppInput>
           </td>
           <td class="body__col">
@@ -72,6 +71,7 @@
               :value="getItem(kz, code)"
               @input="(val) => $emit('onChange', 'kz', code, val)"
               placeholder="Введите текст"
+              :warn="isNotSame(code)"
             ></AppInput>
           </td>
         </tr>
@@ -99,6 +99,17 @@ export default {
   },
   methods: {
     getItem,
+
+    isNotSame(code) {
+      const val1 = getItem(this.ru, code);
+      const val2 = getItem(this.kz, code);
+
+      if (val1 == "" || val2 == "") {
+        return false;
+      }
+
+      return val1 != val2;
+    },
   },
 };
 </script>

@@ -33,12 +33,17 @@ export default {
       default: "text",
     },
     placeholder: String,
+    warn: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     classList() {
       return {
         input: true,
         "input--error": this.value == "",
+        "input--warn": this.warn,
       };
     },
   },
@@ -70,6 +75,11 @@ export default {
       // border: 1px solid #fb4d3d;
       background-color: #ffe2e0;
     }
+  }
+
+  &--warn {
+    outline: none;
+    background-color: rgb(255, 243, 224);
   }
 }
 

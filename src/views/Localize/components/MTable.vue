@@ -104,6 +104,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    showHints: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     getItem,
@@ -124,6 +128,9 @@ export default {
     },
 
     getKzHints(code) {
+      if (!this.showHints) {
+        return [];
+      }
       const val = getItem(this.ru, code);
       const hints = [];
       translate(val, "kk")

@@ -20,6 +20,12 @@
           label="Check different fields"
           @toggle="checkSame = !checkSame"
         />
+        <div class="vertical-line"></div>
+        <AppToggle
+          :value="showHints"
+          label="Google Translate"
+          @toggle="showHints = !showHints"
+        />
       </div>
     </div>
 
@@ -33,6 +39,7 @@
       :kz="kz"
       :ru="ru"
       :check-same="checkSame"
+      :show-hints="showHints"
       @onChange="onChange"
       @readFile="readFile"
       @download="downloadFile"
@@ -62,6 +69,7 @@ export default {
       ru: {},
       codes: [],
       checkSame: false,
+      showHints: false,
     };
   },
   computed: {

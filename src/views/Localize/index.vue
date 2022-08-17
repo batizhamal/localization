@@ -20,12 +20,6 @@
           label="Check different fields"
           @toggle="checkSame = !checkSame"
         />
-        <!-- <AppButton
-          icon="download"
-          title="Download all"
-          outline
-          :disabled="true"
-        /> -->
       </div>
     </div>
 

@@ -128,7 +128,7 @@ export default {
       const hints = [];
       translate(val, "kk")
         .then((res) => {
-          hints.push(res);
+          hints.push(...res);
         })
         .catch((err) => {
           console.log(err);

@@ -12,7 +12,7 @@
       @input="$emit('input', $event.target.value)"
       @click="toggleVisible"
     />
-    <div v-show="visible && hints.length != 0" class="hints">
+    <div v-show="showHints" class="hints">
       <ul>
         <li
           v-for="(hint, index) in hints"
@@ -61,6 +61,12 @@ export default {
     };
   },
   computed: {
+    showHints() {
+      if (!this.visible) {
+        return false;
+      }
+      return this.hints.length != 0 && this.value == "";
+    },
     classList() {
       return {
         input: true,
@@ -136,8 +142,8 @@ div {
   height: auto;
   max-height: 150px;
   min-height: 0px;
-  overflow-y: scroll;
-  box-shadow: 0 5px 15px 0 rgba($color: #000000, $alpha: 0.2);
+  // overflow-y: scroll;
+  box-shadow: 0 10px 10px 0 rgba($color: #000000, $alpha: 0.1);
 }
 
 .hints ul {
@@ -147,14 +153,11 @@ div {
   margin: 0;
 }
 .hints ul li {
-  border-bottom: 1px solid #eeeeee;
   padding: 10px;
   cursor: pointer;
-  background: #fafafa;
+  background: #ffffff;
 }
-.hints ul li:first-child {
-  border-top: 2px solid #eeeeee;
-}
+
 .hints ul li:hover {
   background: #cfcfcf;
 }

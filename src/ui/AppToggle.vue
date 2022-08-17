@@ -1,10 +1,10 @@
 <template>
   <div class="toggle">
+    <p class="toggle__label">{{ label }}</p>
     <span class="toggle__wrapper" @click="$emit('toggle')">
       <span class="toggle__background" :class="backgroundStyles" />
       <span class="toggle__indicator" :class="indicatorStyles" />
     </span>
-    <p class="toggle__label">{{ label }}</p>
   </div>
 </template>
 
@@ -34,11 +34,6 @@ export default {
       };
     },
   },
-  //   methods: {
-  //     toggle() {
-  //       this.$emit("input", !this.value);
-  //     },
-  //   },
 };
 </script>
 

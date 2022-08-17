@@ -100,11 +100,19 @@ export default {
     codes: Array,
     kz: Object,
     ru: Object,
+    checkSame: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     getItem,
 
     isNotSame(code) {
+      if (!this.checkSame) {
+        return false;
+      }
+
       const val1 = getItem(this.ru, code);
       const val2 = getItem(this.kz, code);
 
@@ -125,7 +133,6 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-      console.log(hints);
       return hints;
     },
   },
@@ -137,7 +144,6 @@ table {
   $self: &;
 
   width: 100%;
-  font-size: 0.9rem;
   border-collapse: collapse;
   max-width: 100%;
 }

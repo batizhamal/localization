@@ -1,9 +1,6 @@
 <template>
   <div>
-    <label
-      v-if="label"
-      :for="id"
-    >{{ label }}</label>
+    <label v-if="label" :for="id">{{ label }}</label>
     <input
       :id="id"
       :value="value"
@@ -14,11 +11,8 @@
       :class="classList"
       @input="$emit('input', $event.target.value)"
       @click="toggleVisible"
-    >
-    <div
-      v-show="visible && hints.length != 0"
-      class="hints"
-    >
+    />
+    <div v-show="visible && hints.length != 0" class="hints">
       <ul>
         <li
           v-for="(hint, index) in hints"
@@ -86,7 +80,6 @@ export default {
       this.visible = !this.visible;
     },
     hintClicked(index) {
-      console.log(this.hints[index]);
       this.$emit("input", this.hints[index]);
       this.toggleVisible();
     },
@@ -104,6 +97,7 @@ export default {
   border-width: 0 1px 1px 0;
   border-color: #eeeeee;
   outline: none;
+  font-size: 1rem;
 
   &:focus {
     outline: none;

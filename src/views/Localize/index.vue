@@ -14,28 +14,31 @@
           @click="clearStorage"
         />
       </div>
-      <!-- <div>
-        <AppButton
+      <div>
+        <AppToggle
+          :value="checkSame"
+          label="Check different fields"
+          @toggle="checkSame = !checkSame"
+        />
+        <!-- <AppButton
           icon="download"
           title="Download all"
           outline
           :disabled="true"
-        />
-      </div> -->
+        /> -->
+      </div>
     </div>
 
-    <div
-      v-show="isEmpty"
-      class="message"
-    >
-      <img src="https://super.so/icon/dark/alert-triangle.svg">
-      <span>Nothing to display.<br>Upload files to start working.</span>
+    <div v-show="isEmpty" class="message">
+      <img src="https://super.so/icon/dark/alert-triangle.svg" />
+      <span>Nothing to display.<br />Upload files to start working.</span>
     </div>
 
     <MTable
       :codes="codes"
       :kz="kz"
       :ru="ru"
+      :check-same="checkSame"
       @onChange="onChange"
       @readFile="readFile"
       @download="downloadFile"
@@ -50,18 +53,21 @@ import MTable from "./components/MTable.vue";
 import { uploadJson, downloadJson } from "@/components/service/FileService";
 import { setItem, fillDelta } from "@/components/service/JsonService";
 import { cloneDeep } from "lodash";
+import AppToggle from "@/ui/AppToggle.vue";
 
 export default {
   components: {
     AppButton,
     AppInputFile,
     MTable,
+    AppToggle,
   },
   data: () => {
     return {
       kz: {},
       ru: {},
       codes: [],
+      checkSame: false,
     };
   },
   computed: {

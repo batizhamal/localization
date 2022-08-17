@@ -3,13 +3,13 @@
     <div class="panel">
       <div>
         <AppInputFile
-          title="Upload file"
+          title="Загрузить файл"
           icon-color="white"
           @change="readFile"
         />
         <AppButton
           icon="trash"
-          title="Clear all"
+          title="Очистить всё"
           outline
           @click="clearStorage"
         />
@@ -17,10 +17,10 @@
       <div>
         <AppToggle
           :value="checkSame"
-          label="Check different fields"
+          label="Подсветка разных полей"
           @toggle="checkSame = !checkSame"
         />
-        <div class="vertical-line"></div>
+        <div class="vertical-line" />
         <AppToggle
           :value="showHints"
           label="Google Translate"
@@ -29,9 +29,12 @@
       </div>
     </div>
 
-    <div v-show="isEmpty" class="message">
-      <img src="https://super.so/icon/dark/alert-triangle.svg" />
-      <span>Nothing to display.<br />Upload files to start working.</span>
+    <div
+      v-show="isEmpty"
+      class="message"
+    >
+      <img src="https://super.so/icon/dark/alert-triangle.svg">
+      <span>Таблица пустая.<br>Загрузите файлы чтобы начать работать.</span>
     </div>
 
     <MTable

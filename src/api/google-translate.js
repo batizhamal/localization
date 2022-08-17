@@ -1,6 +1,6 @@
 import api from "@/api";
 
-const API_KEY = "...";
+const API_KEY = "AIzaSyCFSmxmoFonpg9zufuK9uiZz44JuFOoR7U";
 
 export const translate = async (text, lang) => {
   try {

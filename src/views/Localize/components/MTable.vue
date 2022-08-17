@@ -33,7 +33,6 @@
                 clear
                 @change="$emit('readFile', ...arguments)"
               />
-              <!-- <AppButton icon="trash" icon-color="grey-to-red" clear /> -->
               <AppButton
                 icon="download"
                 icon-color="grey-to-blue"

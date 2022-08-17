@@ -134,12 +134,21 @@ export default {
       const hints = [];
       translate(val, "kk")
         .then((res) => {
-          hints.push(...res);
+          hints.push(...this.matchCase(val, res));
         })
         .catch((err) => {
           console.log(err);
         });
       return hints;
+    },
+
+    matchCase(val, translations) {
+      return translations.map((el) => {
+        if (val.charAt(0).toUpperCase() == val.charAt(0)) {
+          return el.charAt(0).toUpperCase() + el.slice(1);
+        }
+        return el;
+      });
     },
   },
 };

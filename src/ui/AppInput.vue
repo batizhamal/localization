@@ -1,9 +1,6 @@
 <template>
   <div>
-    <label
-      v-if="label"
-      :for="id"
-    >{{ label }}</label>
+    <label v-if="label" :for="id">{{ label }}</label>
     <input
       :id="id"
       :value="value"
@@ -14,11 +11,8 @@
       :class="classList"
       @input="$emit('input', $event.target.value)"
       @click="toggleVisible"
-    >
-    <div
-      v-show="showHints"
-      class="hints"
-    >
+    />
+    <div v-show="showHints" class="hints">
       <ul>
         <li
           v-for="(hint, index) in hints"

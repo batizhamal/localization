@@ -1,17 +1,23 @@
 <template>
-  <button @click="$emit('click')" :disabled="disabled" :class="classList">
+  <button
+    :disabled="disabled"
+    :class="classList"
+    @click="$emit('click')"
+  >
     <AppIcon
       v-if="icon"
       :class="{ button__icon: true, 'button__icon--hide': loading }"
       :icon="icon"
-      :color="icon_color"
+      :color="iconColor"
     />
     <span
       v-if="title"
       :class="{ button__title: true, 'button__title--hide': loading }"
-      >{{ title }}</span
+    >{{ title }}</span>
+    <div
+      v-if="loading"
+      class="button__loader"
     >
-    <div class="button__loader" v-if="loading">
       <AppLoader size="20" />
     </div>
   </button>
@@ -38,7 +44,7 @@ export default {
     red: Boolean,
     clear: Boolean,
     icon: String,
-    icon_color: {
+    iconColor: {
       type: String,
     },
   },

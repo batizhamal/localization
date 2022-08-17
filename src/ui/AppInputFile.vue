@@ -1,19 +1,19 @@
 <template>
   <div>
     <input
-      type="file"
       ref="mfile"
+      type="file"
       class="file"
       @change="$emit('change', $refs.mfile.files[0])"
-    />
+    >
     <AppButton
       icon="upload"
-      :icon_color="icon_color"
+      :icon-color="iconColor"
       :title="title"
       :disabled="disabled"
       :clear="clear"
-      @click="$refs.mfile.click()"
       primary
+      @click="$refs.mfile.click()"
     />
   </div>
 </template>
@@ -34,7 +34,7 @@ export default {
       default: false,
     },
     clear: Boolean,
-    icon_color: String,
+    iconColor: String,
   },
 };
 </script>

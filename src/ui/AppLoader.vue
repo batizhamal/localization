@@ -1,5 +1,8 @@
 <template>
-  <div :class="classList" :style="!fullscreen && !overlay && style">
+  <div
+    :class="classList"
+    :style="!fullscreen && !overlay && style"
+  >
     <svg
       viewBox="25 25 50 50"
       class="loader__icon"
@@ -11,9 +14,12 @@
         r="20"
         fill="none"
         class="loader__circular"
-      ></circle>
+      />
     </svg>
-    <div class="loader__label" v-if="label || title">
+    <div
+      v-if="label || title"
+      class="loader__label"
+    >
       {{ label || title }}
     </div>
   </div>

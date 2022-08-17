@@ -1,22 +1,25 @@
 <template>
   <div class="icon">
-    <component :is="icon" :color="color"></component>
+    <component
+      :is="icon"
+      :color="color"
+    />
   </div>
 </template>
 
 <script>
 export default {
-  props: {
-    icon: String,
-    color: {
-      type: String,
-    },
-  },
   components: {
     Trash: () => import("@/assets/icons/Trash"),
     Upload: () => import("@/assets/icons/Upload"),
     Download: () => import("@/assets/icons/Download"),
     Edit: () => import("@/assets/icons/Edit"),
+  },
+  props: {
+    icon: String,
+    color: {
+      type: String,
+    },
   },
 };
 </script>

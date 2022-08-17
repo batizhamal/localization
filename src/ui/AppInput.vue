@@ -1,16 +1,33 @@
 <template>
   <div>
-    <label v-if="label" :for="id">{{ label }}</label>
+    <label
+      v-if="label"
+      :for="id"
+    >{{ label }}</label>
     <input
-      :value="value"
-      @input="$emit('input', $event.target.value)"
-      :name="name"
       :id="id"
+      :value="value"
+      :name="name"
       :required="required"
       :type="type"
       :placeholder="placeholder"
       :class="classList"
-    />
+      @input="$emit('input', $event.target.value)"
+      @click="toggleVisible"
+    >
+    <div
+      v-show="visible && hints.length != 0"
+      class="hints"
+    >
+      <ul>
+        <li
+          v-for="(hint, index) in hints"
+          :key="`hint-${index}`"
+          @click="hintClicked(index)"
+          v-text="hint"
+        />
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -37,6 +54,17 @@ export default {
       type: Boolean,
       default: false,
     },
+    hints: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+  },
+  data() {
+    return {
+      visible: false,
+    };
   },
   computed: {
     classList() {
@@ -45,6 +73,22 @@ export default {
         "input--error": this.value == "",
         "input--warn": this.warn,
       };
+    },
+    matches() {
+      if (this.value == "") {
+        return [];
+      }
+      return this.hints.filter((hint) => hint.includes(this.value));
+    },
+  },
+  methods: {
+    toggleVisible() {
+      this.visible = !this.visible;
+    },
+    hintClicked(index) {
+      console.log(this.hints[index]);
+      this.$emit("input", this.hints[index]);
+      this.toggleVisible();
     },
   },
 };
@@ -86,5 +130,53 @@ export default {
 div {
   display: inline-block;
   width: 100%;
+  position: relative;
+}
+
+.hints {
+  position: absolute;
+  top: calc(3rem - 2px);
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: auto;
+  max-height: 150px;
+  min-height: 0px;
+  overflow-y: scroll;
+  box-shadow: 0 5px 15px 0 rgba($color: #000000, $alpha: 0.2);
+}
+
+.hints ul {
+  list-style-type: none;
+  text-align: left;
+  padding-left: 0;
+  margin: 0;
+}
+.hints ul li {
+  border-bottom: 1px solid #eeeeee;
+  padding: 10px;
+  cursor: pointer;
+  background: #fafafa;
+}
+.hints ul li:first-child {
+  border-top: 2px solid #eeeeee;
+}
+.hints ul li:hover {
+  background: #cfcfcf;
+}
+
+::-webkit-scrollbar {
+  background-color: #fafafa;
+  width: 10px;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #babac0;
+  border-radius: 1rem;
+  border: 0;
 }
 </style>

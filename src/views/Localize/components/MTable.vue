@@ -6,19 +6,19 @@
           <th class="head__col head__col--num">
             <span>RU</span>
           </th>
-          <th class="head__col head__col--code"></th>
+          <th class="head__col head__col--code" />
           <th class="head__col">
-            <span></span>
+            <span />
             <div class="head__buttons">
               <AppInputFile
-                icon_color="grey-to-blue"
-                @change="$emit('readFile', ...arguments)"
+                icon-color="grey-to-blue"
                 :title="null"
                 clear
+                @change="$emit('readFile', ...arguments)"
               />
               <AppButton
                 icon="download"
-                icon_color="grey-to-blue"
+                icon-color="grey-to-blue"
                 clear
                 @click="$emit('download', 'ru')"
               />
@@ -28,15 +28,15 @@
             <span class="ml-1">KZ</span>
             <div class="head__buttons">
               <AppInputFile
-                icon_color="grey-to-blue"
-                @change="$emit('readFile', ...arguments)"
+                icon-color="grey-to-blue"
                 :title="null"
                 clear
+                @change="$emit('readFile', ...arguments)"
               />
-              <!-- <AppButton icon="trash" icon_color="grey-to-red" clear /> -->
+              <!-- <AppButton icon="trash" icon-color="grey-to-red" clear /> -->
               <AppButton
                 icon="download"
-                icon_color="grey-to-blue"
+                icon-color="grey-to-blue"
                 clear
                 @click="$emit('download', 'kz')"
               />
@@ -54,25 +54,28 @@
             <p>{{ index }}</p>
           </td>
           <td class="body__col body__col--code">
-            <p class="ml-1">{{ code.join("::") }}</p>
+            <p class="ml-1">
+              {{ code.join("::") }}
+            </p>
           </td>
           <td class="body__col">
             <AppInput
               type="text"
               :value="getItem(ru, code)"
-              @input="(val) => $emit('onChange', 'ru', code, val)"
               placeholder="Введите текст"
               :warn="isNotSame(code)"
-            ></AppInput>
+              @input="(val) => $emit('onChange', 'ru', code, val)"
+            />
           </td>
           <td class="body__col">
             <AppInput
               type="text"
               :value="getItem(kz, code)"
-              @input="(val) => $emit('onChange', 'kz', code, val)"
               placeholder="Введите текст"
               :warn="isNotSame(code)"
-            ></AppInput>
+              :hints="getKzHints(code)"
+              @input="(val) => $emit('onChange', 'kz', code, val)"
+            />
           </td>
         </tr>
       </tbody>
@@ -85,6 +88,7 @@ import AppInput from "@/ui/AppInput.vue";
 import AppButton from "@/ui/AppButton.vue";
 import AppInputFile from "@/ui/AppInputFile.vue";
 import { getItem } from "@/components/service/JsonService";
+import { translate } from "@/api/google-translate";
 
 export default {
   components: {
@@ -109,6 +113,20 @@ export default {
       }
 
       return val1 != val2;
+    },
+
+    getKzHints(code) {
+      const val = getItem(this.ru, code);
+      const hints = [];
+      translate(val, "kk")
+        .then((res) => {
+          hints.push(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log(hints);
+      return hints;
     },
   },
 };

@@ -4,14 +4,14 @@
       <div>
         <AppInputFile
           title="Upload file"
-          icon_color="white"
+          icon-color="white"
           @change="readFile"
         />
         <AppButton
           icon="trash"
           title="Clear all"
-          @click="clearStorage"
           outline
+          @click="clearStorage"
         />
       </div>
       <!-- <div>
@@ -24,9 +24,12 @@
       </div> -->
     </div>
 
-    <div class="message" v-show="isEmpty">
-      <img src="https://super.so/icon/dark/alert-triangle.svg" />
-      <span>Nothing to display.<br />Upload files to start working.</span>
+    <div
+      v-show="isEmpty"
+      class="message"
+    >
+      <img src="https://super.so/icon/dark/alert-triangle.svg">
+      <span>Nothing to display.<br>Upload files to start working.</span>
     </div>
 
     <MTable
@@ -61,21 +64,19 @@ export default {
       codes: [],
     };
   },
-  created() {
+  computed: {
+    isEmpty() {
+      return this.codes.length == 0;
+    },
+  },
+  async created() {
     ["kz", "ru"].forEach((el) => {
       this[el] = JSON.parse(localStorage.getItem(el)) ?? {};
     });
 
     this.codes = JSON.parse(localStorage.getItem("codes")) ?? [];
   },
-  computed: {
-    isEmpty() {
-      return this.codes.length == 0;
-    },
-  },
   methods: {
-    downloadJson,
-
     downloadFile(lang) {
       downloadJson(lang, this[lang]);
     },

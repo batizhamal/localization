@@ -1,6 +1,11 @@
 <template>
   <div style="display: inline">
-    <component :is="icon" :color="color" :width="width" :height="height" />
+    <component
+      :is="icon"
+      :color="color"
+      :width="width"
+      :height="height"
+    />
   </div>
 </template>
 

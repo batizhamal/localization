@@ -5,6 +5,7 @@
         <AppInputFile
           title="Загрузить файл"
           icon-color="white"
+          :loading="loading"
           @change="readFile"
         />
         <AppButton
@@ -72,6 +73,7 @@ export default {
       codes: [],
       checkSame: false,
       showHints: false,
+      loading: false,
     };
   },
   computed: {
@@ -98,6 +100,7 @@ export default {
     },
 
     async readFile(file) {
+      this.loading = true;
       try {
         const data = await uploadJson(file);
 
@@ -127,6 +130,8 @@ export default {
         localStorage.setItem(filename, JSON.stringify(this[filename]));
       } catch (error) {
         console.log(error);
+      } finally {
+        this.loading = false;
       }
     },
 

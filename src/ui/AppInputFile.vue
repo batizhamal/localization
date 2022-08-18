@@ -5,13 +5,14 @@
       type="file"
       class="file"
       @change="$emit('change', $refs.mfile.files[0])"
-    >
+    />
     <AppButton
       icon="upload"
       :icon-color="iconColor"
       :title="title"
       :disabled="disabled"
       :clear="clear"
+      :loading="loading"
       primary
       @click="$refs.mfile.click()"
     />
@@ -30,6 +31,10 @@ export default {
       default: "Upload",
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    loading: {
       type: Boolean,
       default: false,
     },

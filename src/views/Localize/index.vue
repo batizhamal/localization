@@ -29,12 +29,9 @@
       </div>
     </div>
 
-    <div
-      v-show="isEmpty"
-      class="message"
-    >
-      <img src="https://super.so/icon/dark/alert-triangle.svg">
-      <span>Таблица пустая.<br>Загрузите файлы чтобы начать работать.</span>
+    <div v-show="isEmpty" class="message">
+      <AppIcon icon="alert" width="48" height="48" class="mb-1" />
+      <span>Таблица пустая.<br />Загрузите файлы чтобы начать работать.</span>
     </div>
 
     <MTable
@@ -53,18 +50,20 @@
 <script>
 import AppButton from "@/ui/AppButton.vue";
 import AppInputFile from "@/ui/AppInputFile.vue";
+import AppToggle from "@/ui/AppToggle.vue";
+import AppIcon from "@/ui/AppIcon.vue";
 import MTable from "./components/MTable.vue";
 import { uploadJson, downloadJson } from "@/components/service/FileService";
 import { setItem, fillDelta } from "@/components/service/JsonService";
 import { cloneDeep } from "lodash";
-import AppToggle from "@/ui/AppToggle.vue";
 
 export default {
   components: {
     AppButton,
     AppInputFile,
-    MTable,
     AppToggle,
+    AppIcon,
+    MTable,
   },
   data: () => {
     return {
@@ -145,6 +144,7 @@ export default {
           }
           this.initCodes(item, [sec1[index]], path, pathLen);
         });
+        path.splice(pathLen);
         return;
       }
       if (typeof primary === "object" && !Array.isArray(primary)) {
@@ -156,6 +156,7 @@ export default {
           }
           this.initCodes(primary[key], [sec1[key]], path, pathLen);
         });
+        path.splice(pathLen);
         return;
       }
       this.savePathArrayAsCode(path);
@@ -205,12 +206,6 @@ export default {
   transform: translate(-50%, -50%);
   justify-items: center;
   text-align: center;
-
-  & > img {
-    width: 3rem;
-    height: 3rem;
-    margin-bottom: 20px;
-  }
 
   & > span {
     display: block;

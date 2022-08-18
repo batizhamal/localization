@@ -1,9 +1,6 @@
 <template>
-  <div class="icon">
-    <component
-      :is="icon"
-      :color="color"
-    />
+  <div style="display: inline">
+    <component :is="icon" :color="color" :width="width" :height="height" />
   </div>
 </template>
 
@@ -14,20 +11,21 @@ export default {
     Upload: () => import("@/assets/icons/Upload"),
     Download: () => import("@/assets/icons/Download"),
     Edit: () => import("@/assets/icons/Edit"),
+    Alert: () => import("@/assets/icons/Alert"),
   },
   props: {
     icon: String,
     color: {
       type: String,
     },
+    width: {
+      type: String,
+      default: "16",
+    },
+    height: {
+      type: String,
+      default: "16",
+    },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.icon {
-  width: 1rem;
-  height: 1rem;
-  display: inline;
-}
-</style>

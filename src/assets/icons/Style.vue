@@ -5,6 +5,14 @@ export default {
       type: String,
       default: "black",
     },
+    width: {
+      type: String,
+      default: "16",
+    },
+    height: {
+      type: String,
+      default: "16",
+    },
   },
 };
 </script>

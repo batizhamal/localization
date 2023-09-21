@@ -1,5 +1,8 @@
 # localization
 
+## Demo:
+![Localization Demo](https://github.com/batizhamal/localization/assets/52880286/6017a123-0021-4b39-90a1-582623f8a37b)
+
 ## Description:
 An application to simplify the localization process of the current working project. It has specifically developed method to parse through complex nested objects. The project is integrated with Google Cloud Translate API to provide the translation hints to the users.
 
